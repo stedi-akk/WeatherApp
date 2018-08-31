@@ -20,7 +20,7 @@ class WeatherActivityModel : BaseViewModel<WeatherActivity>() {
     }
 }
 
-class WeatherActivity : BaseActivity() {
+class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
 
     private lateinit var viewModel: WeatherActivityModel
 

@@ -20,7 +20,7 @@ class CitySearchActivityModel : BaseViewModel<CitySearchActivity>() {
     }
 }
 
-class CitySearchActivity : BaseActivity() {
+class CitySearchActivity : BaseActivity(), CitySearchPresenter.UIImpl {
 
     private lateinit var viewModel: CitySearchActivityModel
 
