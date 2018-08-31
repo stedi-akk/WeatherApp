@@ -2,6 +2,7 @@ package com.stedi.weatherapp.other
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.ConnectivityManager
 import android.support.annotation.DimenRes
 import android.support.annotation.StringRes
 import android.util.TypedValue
@@ -11,6 +12,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun Context.getApp() = applicationContext as App
+
+fun Context.hasNetworkConnection(): Boolean {
+    val cm = getSystemService(Context.CONNECTIVITY_SERVICE) ?: return false
+    if (cm is ConnectivityManager) {
+        val activeNetwork = cm.activeNetworkInfo ?: return false
+        return activeNetwork.isConnectedOrConnecting
+    } else {
+        return false
+    }
+}
 
 fun Context.dim2px(@DimenRes id: Int): Int {
     return resources.getDimensionPixelOffset(id)

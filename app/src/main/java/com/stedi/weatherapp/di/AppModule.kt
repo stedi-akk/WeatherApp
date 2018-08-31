@@ -8,6 +8,7 @@ import com.stedi.weatherapp.model.repository.impl.PreferenceKeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.CitiesRepository
 import com.stedi.weatherapp.model.repository.interfaces.KeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.WeatherRepository
+import com.stedi.weatherapp.other.NoNetworkInterceptor
 import com.stedi.weatherapp.presenter.impl.CitySearchPresenterImpl
 import com.stedi.weatherapp.presenter.impl.WeatherPresenterImpl
 import com.stedi.weatherapp.presenter.interfaces.CitySearchPresenter
@@ -42,7 +43,7 @@ class AppModule(private val app: App) {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(): WeatherRepository = OWMWeatherRepository("aeb37c75289802db55ca23d32118b154")
+    fun provideWeatherRepository(@AppContext context: Context): WeatherRepository = OWMWeatherRepository("aeb37c75289802db55ca23d32118b154", NoNetworkInterceptor(context))
 
     @Provides
     @Singleton

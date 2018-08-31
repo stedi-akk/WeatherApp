@@ -7,6 +7,7 @@ import com.stedi.weatherapp.model.data.weather.CityWeather
 import com.stedi.weatherapp.model.repository.interfaces.CitiesRepository
 import com.stedi.weatherapp.model.repository.interfaces.KeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.WeatherRepository
+import com.stedi.weatherapp.other.NoNetworkException
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import rx.Scheduler
 import rx.Single
@@ -34,7 +35,11 @@ class WeatherPresenterImpl @Inject constructor(
     override fun getWeatherForSelectedCity() {
         Single.fromCallable {
             val city = citiesRepository.getSelected() ?: throw Exception("no selected city")
-            val weather = weatherRepository.getWeather(city)
+            val weather = try {
+                weatherRepository.getWeather(city)
+            } catch (ex: NoNetworkException) {
+                null
+            }
             if (weather != null) {
                 keyValueRepository.put(KEY_LAST_WEATHER, Gson().toJson(weather))
                 return@fromCallable weather
@@ -47,10 +52,12 @@ class WeatherPresenterImpl @Inject constructor(
                 .subscribe({ weather ->
                     ui?.showWeather(weather!!)
                 }, { throwable ->
-                    throwable.printStackTrace()
                     when (throwable.message) {
                         "no selected city" -> ui?.showNoSelectedCityMessage()
-                        else -> ui?.showFailedToGetWeatherMessage()
+                        else -> {
+                            throwable.printStackTrace()
+                            ui?.showFailedToGetWeatherMessage()
+                        }
                     }
                 })
     }

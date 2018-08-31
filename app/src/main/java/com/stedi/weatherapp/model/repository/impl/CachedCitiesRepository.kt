@@ -8,14 +8,6 @@ class CachedCitiesRepository(private val target: CitiesRepository) : CitiesRepos
     private var selectedCity: String? = null
 
     @Synchronized
-    override fun getAll(): List<String> {
-        if (allCities.isEmpty()) {
-            allCities = target.getAll()
-        }
-        return allCities
-    }
-
-    @Synchronized
     override fun getSelected(): String? {
         if (selectedCity == null) {
             selectedCity = target.getSelected()
@@ -27,5 +19,13 @@ class CachedCitiesRepository(private val target: CitiesRepository) : CitiesRepos
     override fun setSelected(city: String) {
         target.setSelected(city)
         selectedCity = target.getSelected()
+    }
+
+    @Synchronized
+    override fun getAll(): List<String> {
+        if (allCities.isEmpty()) {
+            allCities = target.getAll()
+        }
+        return allCities
     }
 }
