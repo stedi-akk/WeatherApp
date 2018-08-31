@@ -26,7 +26,7 @@ class PreferenceKeyValueRepository(
 
     @Suppress("UNCHECKED_CAST")
     @Synchronized
-    override fun <R> get(key: String, default: R?): R? {
-        return PreferenceManager.getDefaultSharedPreferences(context).all?.get(key) as R ?: default
+    override fun <R> get(key: String, default: Any?): R? {
+        return PreferenceManager.getDefaultSharedPreferences(context).all?.get(key) as R ?: default as R
     }
 }

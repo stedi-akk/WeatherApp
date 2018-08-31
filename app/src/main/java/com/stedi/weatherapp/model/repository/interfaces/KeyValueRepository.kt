@@ -5,8 +5,10 @@ import android.support.annotation.WorkerThread
 interface KeyValueRepository {
 
     @WorkerThread
+    @Throws(Exception::class)
     fun put(key: String, value: Any)
 
     @WorkerThread
-    fun <R> get(key: String, default: R?): R?
+    @Throws(Exception::class)
+    fun <R> get(key: String, default: Any?): R?
 }

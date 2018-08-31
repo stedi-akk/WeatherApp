@@ -1,12 +1,15 @@
 package com.stedi.weatherapp.presenter.impl
 
+import com.google.gson.Gson
 import com.stedi.weatherapp.di.DefaultScheduler
 import com.stedi.weatherapp.di.UiScheduler
+import com.stedi.weatherapp.model.data.weather.CityWeather
 import com.stedi.weatherapp.model.repository.interfaces.CitiesRepository
 import com.stedi.weatherapp.model.repository.interfaces.KeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.WeatherRepository
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import rx.Scheduler
+import rx.Single
 import javax.inject.Inject
 
 class WeatherPresenterImpl @Inject constructor(
@@ -15,14 +18,40 @@ class WeatherPresenterImpl @Inject constructor(
         private val keyValueRepository: KeyValueRepository,
         @DefaultScheduler private val subscribeOn: Scheduler,
         @UiScheduler private val observeOn: Scheduler) : WeatherPresenter {
-    override fun getWeatherForSelectedCity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+
+    private val KEY_LAST_WEATHER = "KEY_LAST_WEATHER"
+
+    private var ui: WeatherPresenter.UIImpl? = null
 
     override fun onAttach(ui: WeatherPresenter.UIImpl) {
+        this.ui = ui
     }
 
     override fun onDetach() {
+        this.ui = null
+    }
 
+    override fun getWeatherForSelectedCity() {
+        Single.fromCallable {
+            val city = citiesRepository.getSelected() ?: throw Exception("no selected city")
+            val weather = weatherRepository.getWeather(city)
+            if (weather != null) {
+                keyValueRepository.put(KEY_LAST_WEATHER, Gson().toJson(weather))
+                return@fromCallable weather
+            } else {
+                val json: String = keyValueRepository.get(KEY_LAST_WEATHER, null) ?: throw Exception("failed to get weather")
+                return@fromCallable Gson().fromJson(json, CityWeather::class.java) ?: throw Exception("failed to get weather")
+            }
+        }.subscribeOn(subscribeOn)
+                .observeOn(observeOn)
+                .subscribe({ weather ->
+                    ui?.showWeather(weather!!)
+                }, { throwable ->
+                    throwable.printStackTrace()
+                    when (throwable.message) {
+                        "no selected city" -> ui?.showNoSelectedCityMessage()
+                        else -> ui?.showFailedToGetWeatherMessage()
+                    }
+                })
     }
 }

@@ -6,5 +6,6 @@ import com.stedi.weatherapp.model.data.weather.CityWeather
 interface WeatherRepository {
 
     @WorkerThread
+    @Throws(Exception::class)
     fun getWeather(cityName: String): CityWeather?
 }
