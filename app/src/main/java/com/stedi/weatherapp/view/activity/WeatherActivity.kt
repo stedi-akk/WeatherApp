@@ -2,6 +2,7 @@ package com.stedi.weatherapp.view.activity
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import com.stedi.weatherapp.model.data.weather.CityWeather
 import com.stedi.weatherapp.other.getApp
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
@@ -29,5 +30,17 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
 
         viewModel = ViewModelProviders.of(this).get(WeatherActivityModel::class.java)
         viewModel.init(this)
+    }
+
+    override fun showWeather(cityWeather: CityWeather) {
+
+    }
+
+    override fun showNoSelectedCityMessage() {
+
+    }
+
+    override fun showFailedToGetWeatherMessage() {
+
     }
 }

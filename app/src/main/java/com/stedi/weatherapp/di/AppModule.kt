@@ -2,9 +2,11 @@ package com.stedi.weatherapp.di
 
 import android.content.Context
 import com.stedi.weatherapp.App
-import com.stedi.weatherapp.model.repository.impl.JSONCitiesRepositoryImpl
-import com.stedi.weatherapp.model.repository.impl.OWMWeatherRepositoryImpl
+import com.stedi.weatherapp.model.repository.impl.JSONCitiesRepository
+import com.stedi.weatherapp.model.repository.impl.OWMWeatherRepository
+import com.stedi.weatherapp.model.repository.impl.PreferenceKeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.CitiesRepository
+import com.stedi.weatherapp.model.repository.interfaces.KeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.WeatherRepository
 import com.stedi.weatherapp.presenter.impl.CitySearchPresenterImpl
 import com.stedi.weatherapp.presenter.impl.WeatherPresenterImpl
@@ -36,11 +38,15 @@ class AppModule(private val app: App) {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(): WeatherRepository = OWMWeatherRepositoryImpl("aeb37c75289802db55ca23d32118b154")
+    fun provideKeyValueRepository(@AppContext context: Context): KeyValueRepository = PreferenceKeyValueRepository(context)
 
     @Provides
     @Singleton
-    fun provideCitiesRepository(@AppContext context: Context): CitiesRepository = JSONCitiesRepositoryImpl(context, "world-cities_json.json")
+    fun provideWeatherRepository(): WeatherRepository = OWMWeatherRepository("aeb37c75289802db55ca23d32118b154")
+
+    @Provides
+    @Singleton
+    fun provideCitiesRepository(@AppContext context: Context, repository: KeyValueRepository): CitiesRepository = JSONCitiesRepository(context, "world-cities_json.json", repository)
 
     @Module
     interface Declarations {
@@ -49,6 +55,5 @@ class AppModule(private val app: App) {
 
         @Binds
         fun provideCitySearchPresenter(presenter: CitySearchPresenterImpl): CitySearchPresenter
-
     }
 }

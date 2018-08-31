@@ -9,7 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.io.IOException
 
-class OWMWeatherRepositoryImpl(private val apiKey: String) : WeatherRepository {
+class OWMWeatherRepository(private val apiKey: String) : WeatherRepository {
 
     private interface GetWeather {
         @GET("data/2.5/weather")
