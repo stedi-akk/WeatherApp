@@ -23,9 +23,9 @@ class OWMWeatherRepository(
 
     override fun getWeather(cityName: String): CityWeather? {
         val client = OkHttpClient.Builder()
-        client.connectTimeout(10, TimeUnit.SECONDS)
-        client.readTimeout(10, TimeUnit.SECONDS)
-        client.writeTimeout(10, TimeUnit.SECONDS)
+        client.connectTimeout(5, TimeUnit.SECONDS)
+        client.readTimeout(5, TimeUnit.SECONDS)
+        client.writeTimeout(5, TimeUnit.SECONDS)
         if (interceptor != null) {
             client.addInterceptor(interceptor)
         }

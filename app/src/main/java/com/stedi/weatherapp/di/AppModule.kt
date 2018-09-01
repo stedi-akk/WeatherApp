@@ -19,6 +19,8 @@ import dagger.Provides
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
 import javax.inject.Singleton
 
 @Module(includes = [(AppModule.Declarations::class)])
@@ -31,7 +33,7 @@ class AppModule(private val app: App) {
 
     @Provides
     @DefaultScheduler
-    fun provideDefaultScheduler(): Scheduler = Schedulers.io()
+    fun provideDefaultScheduler(): Scheduler = Schedulers.from(Executors.newSingleThreadExecutor())
 
     @Provides
     @UiScheduler
