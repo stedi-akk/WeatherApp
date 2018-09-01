@@ -30,7 +30,7 @@ class JSONCitiesRepository(
             for (i in 0 until jsonArray.length()) {
                 list.add(jsonArray.getJSONObject(i).getString("name"))
             }
-            return list
+            return list.distinct()
         }
     }
 }
