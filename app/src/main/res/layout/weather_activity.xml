@@ -32,11 +32,12 @@
 
     <TextView
         android:id="@+id/weather_activity_tv_city_name"
-        style="@style/CommonViewMargins"
+        style="@style/ViewWithCommonMargins"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center_vertical|right"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/weather_activity_fab"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/weather_activity_fab"
@@ -50,7 +51,7 @@
         android:layout_margin="@dimen/common_v_spacing"
         app:layout_constraintBottom_toTopOf="@+id/weather_activity_horizontal_guideline"
         app:layout_constraintRight_toLeftOf="@+id/weather_activity_vertical_guideline"
-        tools:src="@drawable/ic_error" />
+        tools:src="@drawable/ic_weather_error" />
 
     <TextView
         android:id="@+id/weather_activity_tv_temperature"
@@ -78,9 +79,10 @@
 
     <TextView
         android:id="@+id/weather_activity_tv_more_weather_info"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginTop="@dimen/common_v_spacing"
+        android:lineSpacingExtra="12dp"
         android:padding="@dimen/common_v_spacing"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

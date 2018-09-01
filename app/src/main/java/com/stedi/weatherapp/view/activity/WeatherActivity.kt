@@ -9,10 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.squareup.picasso.Picasso
 import com.stedi.weatherapp.R
 import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.other.getApp
+import com.stedi.weatherapp.other.getInternalDrawableFromOWMIcon
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
 import javax.inject.Inject
@@ -96,28 +96,20 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
     private fun invalidate() {
         val unknownValue = "??"
 
-        val cityName = cityWeather?.name
+        val cityName = cityWeather?.name ?: getString(R.string.no_selected_city)
         val weather = cityWeather?.weather?.firstOrNull()
-        val iconUrl = weather?.iconUrl
+        val icon = weather?.icon ?: unknownValue
         val temperature = cityWeather?.main?.temp ?: unknownValue
-        val description = if (weather?.main != null && weather.description != null) {
-            getString(R.string.weather_description, weather.main, weather.description)
-        } else {
-            getString(R.string.unknown)
-        }
+        val description = weather?.description ?: unknownValue
         val pressure = cityWeather?.main?.pressure ?: unknownValue
         val humidity = cityWeather?.main?.humidity ?: unknownValue
         val wind = cityWeather?.wind?.speed ?: unknownValue
+        val cloudiness = cityWeather?.clouds?.all ?: unknownValue
 
-        if (iconUrl != null) {
-            Picasso.get().load(iconUrl).into(ivWeather)
-        } else {
-            ivWeather.setImageResource(R.drawable.ic_error)
-        }
-
+        ivWeather.setImageResource(getInternalDrawableFromOWMIcon(icon))
         tvTemperature.text = getString(R.string.temperature_celsius, temperature)
-        tvDescription.text = description
-        tvMoreWeatherInfo.text = getString(R.string.weather_more_info, pressure, humidity, wind)
-        tvCityName.text = cityName ?: getString(R.string.no_selected_city)
+        tvDescription.text = getString(R.string.weather_description, description)
+        tvMoreWeatherInfo.text = getString(R.string.weather_more_info, cloudiness, pressure, humidity, wind)
+        tvCityName.text = cityName
     }
 }

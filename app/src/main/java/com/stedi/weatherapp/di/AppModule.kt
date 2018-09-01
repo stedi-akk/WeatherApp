@@ -2,6 +2,7 @@ package com.stedi.weatherapp.di
 
 import android.content.Context
 import com.stedi.weatherapp.App
+import com.stedi.weatherapp.BuildConfig
 import com.stedi.weatherapp.model.repository.impl.JSONCitiesRepository
 import com.stedi.weatherapp.model.repository.impl.OWMWeatherRepository
 import com.stedi.weatherapp.model.repository.impl.PreferenceKeyValueRepository
@@ -16,6 +17,7 @@ import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
@@ -48,10 +50,14 @@ class AppModule(private val app: App) {
     @Provides
     @Singleton
     fun provideWeatherRepository(@AppContext context: Context): WeatherRepository {
-        val networkInterceptor = NoNetworkInterceptor(context)
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        return OWMWeatherRepository(context, "aeb37c75289802db55ca23d32118b154", listOf(networkInterceptor, loggingInterceptor))
+        val interceptors = ArrayList<Interceptor>()
+        interceptors.add(NoNetworkInterceptor(context))
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            interceptors.add(loggingInterceptor)
+        }
+        return OWMWeatherRepository(context, "aeb37c75289802db55ca23d32118b154", interceptors)
     }
 
     @Provides

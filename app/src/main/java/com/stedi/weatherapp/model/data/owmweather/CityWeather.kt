@@ -5,6 +5,5 @@ data class CityWeather(
         var name: String?,
         var weather: List<Weather>?,
         var main: Main?,
-        var visibility: Int?,
         var wind: Wind?,
         var clouds: Clouds?)
