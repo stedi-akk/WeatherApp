@@ -3,6 +3,7 @@ package com.stedi.weatherapp.view.activity
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.EditText
@@ -33,7 +34,7 @@ class CitySearchActivityModel : BaseViewModel<CitySearchActivity>() {
     }
 }
 
-class CitySearchActivity : BaseActivity(), CitySearchPresenter.UIImpl, CitiesAdapter.ClickListener {
+class CitySearchActivity : AppCompatActivity(), CitySearchPresenter.UIImpl, CitiesAdapter.ClickListener {
 
     private val MINIMUM_QUERY_CHARS = 2
 

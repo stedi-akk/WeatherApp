@@ -3,6 +3,7 @@ package com.stedi.weatherapp.di
 import android.content.Context
 import com.stedi.weatherapp.App
 import com.stedi.weatherapp.BuildConfig
+import com.stedi.weatherapp.model.repository.impl.CachedCitiesRepository
 import com.stedi.weatherapp.model.repository.impl.JSONCitiesRepository
 import com.stedi.weatherapp.model.repository.impl.OWMWeatherRepository
 import com.stedi.weatherapp.model.repository.impl.PreferenceKeyValueRepository
@@ -63,7 +64,7 @@ class AppModule(private val app: App) {
     @Provides
     @Singleton
     fun provideCitiesRepository(@AppContext context: Context, repository: KeyValueRepository): CitiesRepository {
-        return JSONCitiesRepository(context, "world-cities_json.json", repository)
+        return CachedCitiesRepository(JSONCitiesRepository(context, "world-cities_json.json", repository))
     }
 
     @Module

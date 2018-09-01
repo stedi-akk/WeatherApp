@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
@@ -31,7 +32,7 @@ class WeatherActivityModel : BaseViewModel<WeatherActivity>() {
     }
 }
 
-class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
+class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
 
     private val CITY_SEARCH_REQUEST_CODE = 111
 
@@ -82,14 +83,13 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
 
     override fun showWeather(cityWeather: CityWeather) {
         this.cityWeather = cityWeather
-        this.cityName = cityWeather.name ?: getString(R.string.no_selected_city)
+        this.cityName = cityWeather.name
         invalidate()
     }
 
     override fun showNoSelectedCity() {
         cityWeather = null
         cityName = null
-        showToastLong(R.string.no_selected_city)
         invalidate()
     }
 
@@ -115,6 +115,7 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
         val humidity = cityWeather?.main?.humidity ?: unknownValue
         val wind = cityWeather?.wind?.speed ?: unknownValue
         val cloudiness = cityWeather?.clouds?.all ?: unknownValue
+        val cityName = cityName ?: getString(R.string.no_selected_city)
 
         ivWeather.setImageResource(getInternalDrawableFromOWMIcon(icon))
         tvTemperature.text = getString(R.string.temperature_celsius, temperature)
