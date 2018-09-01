@@ -9,8 +9,8 @@ interface WeatherPresenter : Presenter<WeatherPresenter.UIImpl> {
     interface UIImpl : UI {
         fun showWeather(cityWeather: CityWeather)
 
-        fun showNoSelectedCityMessage()
+        fun showNoSelectedCity()
 
-        fun showFailedToGetWeatherMessage()
+        fun showFailedToGetWeather(forCity: String?)
     }
 }

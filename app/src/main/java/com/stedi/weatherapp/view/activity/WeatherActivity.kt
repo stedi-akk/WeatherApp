@@ -13,6 +13,7 @@ import com.stedi.weatherapp.R
 import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.other.getApp
 import com.stedi.weatherapp.other.getInternalDrawableFromOWMIcon
+import com.stedi.weatherapp.other.showToastLong
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
 import javax.inject.Inject
@@ -43,6 +44,7 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
     @BindView(R.id.weather_activity_tv_city_name) lateinit var tvCityName: TextView
 
     private var cityWeather: CityWeather? = null
+    private var cityName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,23 +82,31 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
 
     override fun showWeather(cityWeather: CityWeather) {
         this.cityWeather = cityWeather
+        this.cityName = cityWeather.name ?: getString(R.string.no_selected_city)
         invalidate()
     }
 
-    override fun showNoSelectedCityMessage() {
+    override fun showNoSelectedCity() {
         cityWeather = null
+        cityName = null
+        showToastLong(R.string.no_selected_city)
         invalidate()
     }
 
-    override fun showFailedToGetWeatherMessage() {
+    override fun showFailedToGetWeather(forCity: String?) {
         cityWeather = null
+        cityName = forCity
+        if (forCity != null) {
+            showToastLong(getString(R.string.no_weather_for, forCity))
+        } else {
+            showToastLong(R.string.failed_to_get_weather)
+        }
         invalidate()
     }
 
     private fun invalidate() {
         val unknownValue = "??"
 
-        val cityName = cityWeather?.name ?: getString(R.string.no_selected_city)
         val weather = cityWeather?.weather?.firstOrNull()
         val icon = weather?.icon ?: unknownValue
         val temperature = cityWeather?.main?.temp ?: unknownValue

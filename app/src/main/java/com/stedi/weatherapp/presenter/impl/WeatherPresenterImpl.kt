@@ -24,6 +24,8 @@ class WeatherPresenterImpl @Inject constructor(
 
     private var ui: WeatherPresenter.UIImpl? = null
 
+    @Volatile private var selectedCity: String? = null
+
     override fun onAttach(ui: WeatherPresenter.UIImpl) {
         this.ui = ui
     }
@@ -34,7 +36,9 @@ class WeatherPresenterImpl @Inject constructor(
 
     override fun getWeatherForSelectedCity() {
         Single.fromCallable {
+            selectedCity = null
             val city = citiesRepository.getSelected() ?: throw Exception("no selected city")
+            selectedCity = city
             val weather = try {
                 weatherRepository.getWeather(city)
             } catch (ex: NoNetworkException) {
@@ -53,10 +57,10 @@ class WeatherPresenterImpl @Inject constructor(
                     ui?.showWeather(weather!!)
                 }, { throwable ->
                     when (throwable.message) {
-                        "no selected city" -> ui?.showNoSelectedCityMessage()
+                        "no selected city" -> ui?.showNoSelectedCity()
                         else -> {
                             throwable.printStackTrace()
-                            ui?.showFailedToGetWeatherMessage()
+                            ui?.showFailedToGetWeather(selectedCity)
                         }
                     }
                 })
