@@ -3,7 +3,7 @@ package com.stedi.weatherapp.presenter.impl
 import com.google.gson.Gson
 import com.stedi.weatherapp.di.DefaultScheduler
 import com.stedi.weatherapp.di.UiScheduler
-import com.stedi.weatherapp.model.data.weather.CityWeather
+import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.model.repository.interfaces.CitiesRepository
 import com.stedi.weatherapp.model.repository.interfaces.KeyValueRepository
 import com.stedi.weatherapp.model.repository.interfaces.WeatherRepository

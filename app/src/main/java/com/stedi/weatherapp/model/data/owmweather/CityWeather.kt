@@ -1,4 +1,4 @@
-package com.stedi.weatherapp.model.data.weather
+package com.stedi.weatherapp.model.data.owmweather
 
 data class CityWeather(
         var id: Int?,

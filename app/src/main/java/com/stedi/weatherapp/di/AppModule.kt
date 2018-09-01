@@ -16,14 +16,14 @@ import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import okhttp3.logging.HttpLoggingInterceptor
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.concurrent.Executors
-import java.util.concurrent.ThreadPoolExecutor
 import javax.inject.Singleton
 
-@Module(includes = [(AppModule.Declarations::class)])
+@Module(includes = [(AppModule.PresentersDeclarations::class)])
 class AppModule(private val app: App) {
 
     @Provides
@@ -41,18 +41,27 @@ class AppModule(private val app: App) {
 
     @Provides
     @Singleton
-    fun provideKeyValueRepository(@AppContext context: Context): KeyValueRepository = PreferenceKeyValueRepository(context)
+    fun provideKeyValueRepository(@AppContext context: Context): KeyValueRepository {
+        return PreferenceKeyValueRepository(context)
+    }
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(@AppContext context: Context): WeatherRepository = OWMWeatherRepository("aeb37c75289802db55ca23d32118b154", NoNetworkInterceptor(context))
+    fun provideWeatherRepository(@AppContext context: Context): WeatherRepository {
+        val networkInterceptor = NoNetworkInterceptor(context)
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        return OWMWeatherRepository(context, "aeb37c75289802db55ca23d32118b154", listOf(networkInterceptor, loggingInterceptor))
+    }
 
     @Provides
     @Singleton
-    fun provideCitiesRepository(@AppContext context: Context, repository: KeyValueRepository): CitiesRepository = JSONCitiesRepository(context, "world-cities_json.json", repository)
+    fun provideCitiesRepository(@AppContext context: Context, repository: KeyValueRepository): CitiesRepository {
+        return JSONCitiesRepository(context, "world-cities_json.json", repository)
+    }
 
     @Module
-    interface Declarations {
+    interface PresentersDeclarations {
         @Binds
         fun provideWeatherPresenter(presenter: WeatherPresenterImpl): WeatherPresenter
 

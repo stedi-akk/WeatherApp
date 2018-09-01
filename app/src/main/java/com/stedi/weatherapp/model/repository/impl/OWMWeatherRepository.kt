@@ -1,6 +1,9 @@
 package com.stedi.weatherapp.model.repository.impl
 
-import com.stedi.weatherapp.model.data.weather.CityWeather
+import android.content.Context
+import com.stedi.weatherapp.R
+import com.stedi.weatherapp.di.AppContext
+import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.model.repository.interfaces.WeatherRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,12 +16,13 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class OWMWeatherRepository(
+        @AppContext private val context: Context,
         private val apiKey: String,
-        private val interceptor: Interceptor? = null) : WeatherRepository {
+        private val interceptors: List<Interceptor> = emptyList()) : WeatherRepository {
 
     private interface GetWeather {
         @GET("data/2.5/weather")
-        fun call(@Query("appid") apiKey: String, @Query("q") cityName: String): Call<CityWeather>
+        fun call(@Query("appid") apiKey: String, @Query("q") cityName: String, @Query("units") units: String, @Query("lang") lang: String): Call<CityWeather>
     }
 
     override fun getWeather(cityName: String): CityWeather? {
@@ -26,9 +30,7 @@ class OWMWeatherRepository(
         client.connectTimeout(5, TimeUnit.SECONDS)
         client.readTimeout(5, TimeUnit.SECONDS)
         client.writeTimeout(5, TimeUnit.SECONDS)
-        if (interceptor != null) {
-            client.addInterceptor(interceptor)
-        }
+        interceptors.forEach { client.addInterceptor(it) }
 
         val retrofit = Retrofit.Builder()
                 .client(client.build())
@@ -36,7 +38,9 @@ class OWMWeatherRepository(
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        val response = retrofit.create(GetWeather::class.java).call(apiKey, cityName).execute()
+        val response = retrofit.create(GetWeather::class.java)
+                .call(apiKey, cityName, "metric", context.getString(R.string.openweathermap_lang)).execute()
+
         if (response.isSuccessful) {
             return response.body()
         } else {

@@ -1,7 +1,7 @@
 package com.stedi.weatherapp.model.repository.interfaces
 
 import android.support.annotation.WorkerThread
-import com.stedi.weatherapp.model.data.weather.CityWeather
+import com.stedi.weatherapp.model.data.owmweather.CityWeather
 
 interface WeatherRepository {
 

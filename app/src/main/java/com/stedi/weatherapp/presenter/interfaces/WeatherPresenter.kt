@@ -1,6 +1,6 @@
 package com.stedi.weatherapp.presenter.interfaces
 
-import com.stedi.weatherapp.model.data.weather.CityWeather
+import com.stedi.weatherapp.model.data.owmweather.CityWeather
 
 interface WeatherPresenter : Presenter<WeatherPresenter.UIImpl> {
 

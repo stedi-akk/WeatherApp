@@ -5,28 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/weather_activity_tv_weather_info"
-        style="@style/CommonViewMargins"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/weather_activity_fab"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem/random" />
+    <android.support.constraint.Guideline
+        android:id="@+id/weather_activity_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
-    <TextView
-        android:id="@+id/weather_activity_tv_city_name"
-        style="@style/CommonViewMargins"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center_vertical|right"
-        app:layout_constraintBottom_toBottomOf="@+id/weather_activity_fab"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/weather_activity_fab"
-        app:layout_constraintTop_toTopOf="@+id/weather_activity_fab"
-        tools:text="@tools:sample/first_names" />
+    <android.support.constraint.Guideline
+        android:id="@+id/weather_activity_horizontal_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/weather_activity_fab"
@@ -38,5 +29,62 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/ic_search" />
+
+    <TextView
+        android:id="@+id/weather_activity_tv_city_name"
+        style="@style/CommonViewMargins"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical|right"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/weather_activity_fab"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/weather_activity_fab"
+        app:layout_constraintTop_toTopOf="@+id/weather_activity_fab"
+        tools:text="@tools:sample/first_names" />
+
+    <ImageView
+        android:id="@+id/weather_activity_iv_weather"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_margin="@dimen/common_v_spacing"
+        app:layout_constraintBottom_toTopOf="@+id/weather_activity_horizontal_guideline"
+        app:layout_constraintRight_toLeftOf="@+id/weather_activity_vertical_guideline"
+        tools:src="@drawable/ic_error" />
+
+    <TextView
+        android:id="@+id/weather_activity_tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_v_spacing"
+        android:textSize="@dimen/temperature_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/weather_activity_horizontal_guideline"
+        app:layout_constraintLeft_toRightOf="@+id/weather_activity_vertical_guideline"
+        app:layout_constraintTop_toTopOf="@+id/weather_activity_iv_weather"
+        tools:text="100 C" />
+
+    <TextView
+        android:id="@+id/weather_activity_tv_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/common_v_spacing"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_activity_horizontal_guideline"
+        tools:text="Some text here" />
+
+    <TextView
+        android:id="@+id/weather_activity_tv_more_weather_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/common_v_spacing"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_activity_tv_description"
+        tools:text="And some here" />
 
 </android.support.constraint.ConstraintLayout>

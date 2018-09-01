@@ -5,11 +5,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.squareup.picasso.Picasso
 import com.stedi.weatherapp.R
-import com.stedi.weatherapp.model.data.weather.CityWeather
+import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.other.getApp
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
@@ -34,7 +36,10 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
 
     private lateinit var viewModel: WeatherActivityModel
 
-    @BindView(R.id.weather_activity_tv_weather_info) lateinit var tvWeatherInfo: TextView
+    @BindView(R.id.weather_activity_iv_weather) lateinit var ivWeather: ImageView
+    @BindView(R.id.weather_activity_tv_temperature) lateinit var tvTemperature: TextView
+    @BindView(R.id.weather_activity_tv_description) lateinit var tvDescription: TextView
+    @BindView(R.id.weather_activity_tv_more_weather_info) lateinit var tvMoreWeatherInfo: TextView
     @BindView(R.id.weather_activity_tv_city_name) lateinit var tvCityName: TextView
 
     private var cityWeather: CityWeather? = null
@@ -75,18 +80,44 @@ class WeatherActivity : BaseActivity(), WeatherPresenter.UIImpl {
 
     override fun showWeather(cityWeather: CityWeather) {
         this.cityWeather = cityWeather
-        tvWeatherInfo.text = cityWeather.toString()
-        tvCityName.text = cityWeather.name
+        invalidate()
     }
 
     override fun showNoSelectedCityMessage() {
         cityWeather = null
-        tvWeatherInfo.setText(R.string.no_selected_city)
-        tvCityName.setText(R.string.no_selected_city)
+        invalidate()
     }
 
     override fun showFailedToGetWeatherMessage() {
         cityWeather = null
-        tvWeatherInfo.setText(R.string.failed_to_get_weather)
+        invalidate()
+    }
+
+    private fun invalidate() {
+        val unknownValue = "??"
+
+        val cityName = cityWeather?.name
+        val weather = cityWeather?.weather?.firstOrNull()
+        val iconUrl = weather?.iconUrl
+        val temperature = cityWeather?.main?.temp ?: unknownValue
+        val description = if (weather?.main != null && weather.description != null) {
+            getString(R.string.weather_description, weather.main, weather.description)
+        } else {
+            getString(R.string.unknown)
+        }
+        val pressure = cityWeather?.main?.pressure ?: unknownValue
+        val humidity = cityWeather?.main?.humidity ?: unknownValue
+        val wind = cityWeather?.wind?.speed ?: unknownValue
+
+        if (iconUrl != null) {
+            Picasso.get().load(iconUrl).into(ivWeather)
+        } else {
+            ivWeather.setImageResource(R.drawable.ic_error)
+        }
+
+        tvTemperature.text = getString(R.string.temperature_celsius, temperature)
+        tvDescription.text = description
+        tvMoreWeatherInfo.text = getString(R.string.weather_more_info, pressure, humidity, wind)
+        tvCityName.text = cityName ?: getString(R.string.no_selected_city)
     }
 }
