@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.support.annotation.DimenRes
-import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.util.TypedValue
 import android.widget.Toast
