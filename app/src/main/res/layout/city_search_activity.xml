@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <ImageView
+        style="@style/ViewWithCommonMargins"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
@@ -17,7 +18,7 @@
     <EditText
         android:id="@+id/city_search_activity_et_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="@dimen/common_lr_spacing"
         android:layout_marginRight="@dimen/common_lr_spacing"
         android:hint="@string/search_hint"
