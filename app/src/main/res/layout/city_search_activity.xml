@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout style="@style/ViewWithCommonPaddings"
+<LinearLayout
+    style="@style/ViewWithCommonPaddings"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/ic_cloud_search" />
+
     <EditText
         android:id="@+id/city_search_activity_et_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search_hint" />
+        android:layout_marginLeft="@dimen/common_lr_spacing"
+        android:layout_marginRight="@dimen/common_lr_spacing"
+        android:hint="@string/search_hint"
+        android:inputType="textCapSentences" />
+
+    <TextView
+        android:id="@+id/city_search_activity_empty_view"
+        style="@style/ViewWithCommonMargins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/no_results"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/city_search_activity_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/common_lr_spacing"
+        android:layout_marginRight="@dimen/common_lr_spacing"
         android:scrollbars="vertical"
         tools:listitem="@layout/city_item" />
 

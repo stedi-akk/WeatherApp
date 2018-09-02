@@ -5,6 +5,7 @@
     <string name="failed_to_get_weather">Failed to get weather</string>
     <string name="no_weather_for">No data for \'%s\' :(</string>
     <string name="search_hint">Search city</string>
+    <string name="no_results">No results</string>
     <string name="failed_to_query_cities">Failed to query cities</string>
     <string name="failed_to_select_city">Failed to select city</string>
     <string name="temperature_celsius">%s ℃</string>

@@ -6,18 +6,17 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.stedi.weatherapp.R
-import com.stedi.weatherapp.other.dim2px
 import com.stedi.weatherapp.other.getApp
 import com.stedi.weatherapp.other.showToastLong
 import com.stedi.weatherapp.presenter.interfaces.CitySearchPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
 import com.stedi.weatherapp.view.components.CitiesAdapter
-import com.stedi.weatherapp.view.components.ListSpaceDecoration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -42,6 +41,7 @@ class CitySearchActivity : AppCompatActivity(), CitySearchPresenter.UIImpl, Citi
 
     @BindView(R.id.city_search_activity_et_search) lateinit var searchField: EditText
     @BindView(R.id.city_search_activity_rv) lateinit var recyclerView: RecyclerView
+    @BindView(R.id.city_search_activity_empty_view) lateinit var emptyView: View
 
     private lateinit var adapter: CitiesAdapter
 
@@ -56,15 +56,16 @@ class CitySearchActivity : AppCompatActivity(), CitySearchPresenter.UIImpl, Citi
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-        recyclerView.addItemDecoration(ListSpaceDecoration(dim2px(R.dimen.common_v_spacing), dim2px(R.dimen.common_lr_spacing)))
         adapter = CitiesAdapter(this, this)
         recyclerView.adapter = adapter
 
         RxTextView.textChanges(searchField)
-                .doOnNext { if (it.length < MINIMUM_QUERY_CHARS) adapter.set(emptyList()) }
+                .doOnNext { if (it.length < MINIMUM_QUERY_CHARS) adapter.setData(emptyList()) }
                 .filter { it.length >= MINIMUM_QUERY_CHARS }
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .subscribe { viewModel.presenter.queryCity(it.toString()) }
+
+        invalidateEmptyView()
     }
 
     override fun onStart() {
@@ -83,7 +84,8 @@ class CitySearchActivity : AppCompatActivity(), CitySearchPresenter.UIImpl, Citi
 
     override fun showResult(cities: List<String>) {
         if (searchField.text.length >= MINIMUM_QUERY_CHARS) {
-            adapter.set(cities)
+            adapter.setData(cities)
+            invalidateEmptyView()
         }
     }
 
@@ -98,5 +100,15 @@ class CitySearchActivity : AppCompatActivity(), CitySearchPresenter.UIImpl, Citi
 
     override fun failedToSelectCity() {
         showToastLong(R.string.failed_to_select_city)
+    }
+
+    private fun invalidateEmptyView() {
+        if (adapter.itemCount > 0) {
+            emptyView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        } else {
+            emptyView.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        }
     }
 }

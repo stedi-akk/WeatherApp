@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.stedi.weatherapp.R
 
 class CitiesAdapter(
@@ -22,7 +24,7 @@ class CitiesAdapter(
         setHasStableIds(true)
     }
 
-    fun set(cities: List<String>) {
+    fun setData(cities: List<String>) {
         this.cities.clear()
         this.cities.addAll(cities)
         notifyDataSetChanged()
@@ -33,20 +35,23 @@ class CitiesAdapter(
     override fun getItemId(position: Int) = cities[position].hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.city_item, parent, false) as TextView)
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.city_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val city = cities[position]
         holder.city = city
-        holder.textView.text = city
+        holder.tvName.text = city
     }
 
-    inner class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView), View.OnClickListener {
+    inner class ViewHolder(item: View) : RecyclerView.ViewHolder(item), View.OnClickListener {
+        @BindView(R.id.city_item_tv) lateinit var tvName: TextView
+
         var city: String = ""
 
         init {
-            textView.setOnClickListener(this)
+            ButterKnife.bind(this, item)
+            item.setOnClickListener(this)
         }
 
         override fun onClick(v: View) {
