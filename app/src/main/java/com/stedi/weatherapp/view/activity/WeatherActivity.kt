@@ -19,7 +19,7 @@ import butterknife.ButterKnife
 import com.stedi.weatherapp.R
 import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.other.getApp
-import com.stedi.weatherapp.other.getInternalDrawableFromOWMIcon
+import com.stedi.weatherapp.other.getInternalDrawablesFromOWMIcon
 import com.stedi.weatherapp.other.hasNetworkConnection
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
@@ -56,6 +56,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
     @BindView(R.id.weather_activity_tv_more_weather_info) lateinit var tvMoreWeatherInfo: TextView
     @BindView(R.id.weather_activity_tv_city_name) lateinit var tvCityName: TextView
     @BindView(R.id.weather_activity_progress_bar) lateinit var progressBar: ProgressBar
+    @BindView(R.id.weather_activity_background) lateinit var backgroundView: View
 
     private var cityWeather: CityWeather? = null
     private var cityName: String? = null
@@ -149,7 +150,9 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
                 val wind = cityWeather?.wind?.speed ?: unknownValue
                 val cloudiness = cityWeather?.clouds?.all ?: unknownValue
                 val cityName = cityName ?: unknownValue
-                ivWeather.setImageResource(getInternalDrawableFromOWMIcon(icon))
+                val drawables = getInternalDrawablesFromOWMIcon(icon)
+                ivWeather.setImageResource(drawables.first)
+                backgroundView.setBackgroundResource(drawables.second)
                 tvTemperature.text = getString(R.string.temperature_celsius, temperature)
                 tvDescription.text = getString(R.string.weather_description, description)
                 tvMoreWeatherInfo.text = getString(R.string.weather_more_info, cloudiness, pressure, humidity, wind)
@@ -157,6 +160,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
             }
             WeatherError.NO_SELECTED_CITY -> {
                 ivWeather.setImageResource(R.drawable.ic_cloud_search)
+                backgroundView.setBackgroundResource(R.drawable.background_default)
                 tvTemperature.text = getString(R.string.temperature_celsius, unknownValue)
                 tvDescription.text = getString(R.string.no_selected_city)
                 tvMoreWeatherInfo.text = ""
@@ -164,6 +168,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
             }
             else -> {
                 ivWeather.setImageResource(R.drawable.ic_cloud_question)
+                backgroundView.setBackgroundResource(R.drawable.background_default)
                 tvTemperature.text = getString(R.string.temperature_celsius, unknownValue)
                 tvDescription.text = cityName?.let { getString(R.string.no_weather_for, it) } ?: getString(R.string.failed_to_get_weather)
                 tvMoreWeatherInfo.text = ""

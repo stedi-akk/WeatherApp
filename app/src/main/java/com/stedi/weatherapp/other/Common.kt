@@ -25,19 +25,18 @@ fun Context.hasNetworkConnection(): Boolean {
     }
 }
 
-@DrawableRes
-fun getInternalDrawableFromOWMIcon(icon: String): Int {
+fun getInternalDrawablesFromOWMIcon(icon: String): Pair<Int, Int> {
     return when (icon) {
-        "01d" -> R.drawable.ic_weather_sunny
-        "01n" -> R.drawable.ic_weather_night
-        "02d" -> R.drawable.ic_weather_partlycloudy
-        "02n", "03d", "03n", "04d", "04n" -> R.drawable.ic_weather_cloudy
-        "09d", "09n" -> R.drawable.ic_weather_pouring
-        "10d", "10n" -> R.drawable.ic_weather_rainy
-        "11d", "11n" -> R.drawable.ic_weather_lightning_rainy
-        "13d", "13n" -> R.drawable.ic_weather_snowy
-        "50d", "50n" -> R.drawable.ic_weather_fog
-        else -> R.drawable.ic_weather_error
+        "01d" -> R.drawable.ic_weather_sunny to R.drawable.background_sunny
+        "01n" -> R.drawable.ic_weather_night to R.drawable.background_default
+        "02d" -> R.drawable.ic_weather_partlycloudy to R.drawable.background_clouds
+        "02n", "03d", "03n", "04d", "04n" -> R.drawable.ic_weather_cloudy to R.drawable.background_clouds
+        "09d", "09n" -> R.drawable.ic_weather_pouring to R.drawable.background_rain
+        "10d", "10n" -> R.drawable.ic_weather_rainy to R.drawable.background_rain
+        "11d", "11n" -> R.drawable.ic_weather_lightning_rainy to R.drawable.background_rain
+        "13d", "13n" -> R.drawable.ic_weather_snowy to R.drawable.background_snow
+        "50d", "50n" -> R.drawable.ic_weather_fog to R.drawable.background_fog
+        else -> R.drawable.ic_weather_error to R.drawable.background_default
     }
 }
 
