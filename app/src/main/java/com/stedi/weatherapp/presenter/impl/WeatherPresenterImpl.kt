@@ -49,7 +49,11 @@ class WeatherPresenterImpl @Inject constructor(
                 return@fromCallable weather
             } else {
                 val json: String = keyValueRepository.get(KEY_LAST_WEATHER, null) ?: throw Exception("failed to get weather")
-                return@fromCallable Gson().fromJson(json, CityWeather::class.java) ?: throw Exception("failed to get weather")
+                val lastWeather = Gson().fromJson(json, CityWeather::class.java) ?: throw Exception("failed to get weather")
+                if (lastWeather.name.equals(selectedCity)) {
+                    return@fromCallable lastWeather
+                }
+                throw Exception("failed to get weather")
             }
         }.subscribeOn(subscribeOn)
                 .observeOn(observeOn)

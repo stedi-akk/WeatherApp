@@ -2,7 +2,11 @@ package com.stedi.weatherapp.view.activity
 
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -16,6 +20,7 @@ import com.stedi.weatherapp.R
 import com.stedi.weatherapp.model.data.owmweather.CityWeather
 import com.stedi.weatherapp.other.getApp
 import com.stedi.weatherapp.other.getInternalDrawableFromOWMIcon
+import com.stedi.weatherapp.other.hasNetworkConnection
 import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
 import javax.inject.Inject
@@ -80,6 +85,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
 
     override fun onStart() {
         super.onStart()
+        registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         viewModel.presenter.onAttach(this)
         if (cityWeather == null) {
             onLoading(true)
@@ -90,6 +96,16 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
     override fun onStop() {
         super.onStop()
         viewModel.presenter.onDetach()
+        unregisterReceiver(connectivityReceiver)
+    }
+
+    private val connectivityReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (cityWeather == null && hasNetworkConnection()) {
+                onLoading(true)
+                viewModel.presenter.getWeatherForSelectedCity()
+            }
+        }
     }
 
     override fun showWeather(cityWeather: CityWeather) {
