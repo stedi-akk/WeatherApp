@@ -10,5 +10,6 @@
     <string name="failed_to_select_city">Failed to select city</string>
     <string name="temperature_celsius">%s ℃</string>
     <string name="weather_description">\" %s \"</string>
+    <string name="please_wait">Please wait…</string>
     <string name="weather_more_info">Cloudiness — %1$s\%%\nPressure — %2$s hPa\nHumidity — %3$s\%%\nWind — %4$s km/h</string>
 </resources>

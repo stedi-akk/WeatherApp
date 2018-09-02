@@ -6,7 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -48,6 +50,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
     @BindView(R.id.weather_activity_tv_description) lateinit var tvDescription: TextView
     @BindView(R.id.weather_activity_tv_more_weather_info) lateinit var tvMoreWeatherInfo: TextView
     @BindView(R.id.weather_activity_tv_city_name) lateinit var tvCityName: TextView
+    @BindView(R.id.weather_activity_progress_bar) lateinit var progressBar: ProgressBar
 
     private var cityWeather: CityWeather? = null
     private var cityName: String? = null
@@ -70,6 +73,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == CITY_SEARCH_REQUEST_CODE) {
+            onLoading(true)
             viewModel.presenter.getWeatherForSelectedCity()
         }
     }
@@ -78,6 +82,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
         super.onStart()
         viewModel.presenter.onAttach(this)
         if (cityWeather == null) {
+            onLoading(true)
             viewModel.presenter.getWeatherForSelectedCity()
         }
     }
@@ -91,6 +96,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
         this.cityWeather = cityWeather
         this.cityName = cityWeather.name
         this.weatherError = null
+        onLoading(false)
         invalidate()
     }
 
@@ -98,6 +104,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
         cityWeather = null
         cityName = null
         weatherError = WeatherError.NO_SELECTED_CITY
+        onLoading(false)
         invalidate()
     }
 
@@ -109,6 +116,7 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
         } else {
             WeatherError.INTERNAL
         }
+        onLoading(false)
         invalidate()
     }
 
@@ -145,6 +153,19 @@ class WeatherActivity : AppCompatActivity(), WeatherPresenter.UIImpl {
                 tvMoreWeatherInfo.text = ""
                 tvCityName.text = cityName ?: getString(R.string.no_selected_city)
             }
+        }
+    }
+
+    private fun onLoading(loading: Boolean) {
+        if (loading) {
+            progressBar.visibility = View.VISIBLE
+            ivWeather.setImageDrawable(null)
+            tvTemperature.text = ""
+            tvDescription.text = ""
+            tvMoreWeatherInfo.text = getString(R.string.please_wait)
+            tvCityName.text = ""
+        } else {
+            progressBar.visibility = View.GONE
         }
     }
 }
