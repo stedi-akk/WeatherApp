@@ -25,6 +25,8 @@ import com.stedi.weatherapp.presenter.interfaces.WeatherPresenter
 import com.stedi.weatherapp.view.components.BaseViewModel
 import javax.inject.Inject
 
+// ViewModel can be used not just for implementing MVVM.
+// Because, essentially, it's a component which survives configuration change and nothing more.
 class WeatherActivityModel : BaseViewModel<WeatherActivity>() {
     @Inject lateinit var presenter: WeatherPresenter
 

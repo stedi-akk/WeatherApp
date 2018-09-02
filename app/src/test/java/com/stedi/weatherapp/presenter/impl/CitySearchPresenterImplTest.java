@@ -21,6 +21,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+// The tests are written in Java, because
+// it is painful to write them in Kotlin when using standard testing libraries.
 public class CitySearchPresenterImplTest {
     private CitySearchPresenterImpl presenter;
     private CitiesRepository citiesRepository;

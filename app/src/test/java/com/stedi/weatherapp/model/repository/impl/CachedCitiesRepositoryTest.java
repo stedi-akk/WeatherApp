@@ -10,6 +10,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+// The tests are written in Java, because
+// it is painful to write them in Kotlin when using standard testing libraries.
 public class CachedCitiesRepositoryTest {
     private CitiesRepository targetRepository;
     private CachedCitiesRepository cachedRepository;

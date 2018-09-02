@@ -9,9 +9,12 @@ interface Presenter<in T : UI> {
 
     fun onDetach()
 
+    // Presenters can be attached and detached many times, therefore onDestroy callback is essential in some cases.
     fun onDestroy() {}
 }
 
+// While current presenters don't store anything that is needed to be retained,
+// this interface is still a core of presenters logic, and future presenters should use it for restoring state.
 interface RetainedPresenter<in T : UI> : Presenter<T> {
     fun onRestore(state: Serializable)
 

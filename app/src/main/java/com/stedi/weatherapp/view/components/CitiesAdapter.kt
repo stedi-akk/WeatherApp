@@ -9,9 +9,10 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.stedi.weatherapp.R
+import com.stedi.weatherapp.di.ActivityContext
 
 class CitiesAdapter(
-        private val context: Context,
+        @ActivityContext private val context: Context,
         private val listener: ClickListener) : RecyclerView.Adapter<CitiesAdapter.ViewHolder>() {
 
     private val cities = ArrayList<String>()

@@ -2,6 +2,9 @@ package com.stedi.weatherapp.model.repository.impl
 
 import com.stedi.weatherapp.model.repository.interfaces.CitiesRepository
 
+// I like doing "performance" caching in model layer instead of business.
+// Because, essentially, cache is just another source of data.
+// I usually do this by using Decorator pattern, which allows to "attach" cache to any kind of repository.
 class CachedCitiesRepository(private val target: CitiesRepository) : CitiesRepository {
 
     private var allCities: List<String> = emptyList()

@@ -20,6 +20,8 @@ import com.stedi.weatherapp.view.components.CitiesAdapter
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+// ViewModel can be used not just for implementing MVVM.
+// Because, essentially, it's a component which survives configuration change and nothing more.
 class CitySearchActivityModel : BaseViewModel<CitySearchActivity>() {
     @Inject lateinit var presenter: CitySearchPresenter
 

@@ -35,7 +35,7 @@ class AppModule(private val app: App) {
     fun provideAppContext(): Context = app
 
     @Provides
-    @DefaultScheduler
+    @DefaultScheduler // Single threaded Scheduler allows executing tasks in queue (no race conditions, etc.).
     fun provideDefaultScheduler(): Scheduler = Schedulers.from(Executors.newSingleThreadExecutor())
 
     @Provides
@@ -67,7 +67,7 @@ class AppModule(private val app: App) {
         return CachedCitiesRepository(JSONCitiesRepository(context, "world-cities_json.json", repository))
     }
 
-    @Module
+    @Module // Eliminates boilerplate code.
     interface PresentersDeclarations {
         @Binds
         fun provideWeatherPresenter(presenter: WeatherPresenterImpl): WeatherPresenter

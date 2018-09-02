@@ -58,7 +58,7 @@ class WeatherPresenterImpl @Inject constructor(
         }.subscribeOn(subscribeOn)
                 .observeOn(observeOn)
                 .subscribe({ weather ->
-                    ui?.showWeather(weather!!)
+                    ui?.showWeather(weather!!) // no NPE here
                 }, { throwable ->
                     when (throwable.message) {
                         "no selected city" -> ui?.showNoSelectedCity()
